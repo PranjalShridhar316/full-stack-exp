@@ -1,0 +1,164 @@
+#html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Filter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="wrapper">
+    <h1>Product Filter</h1>
+
+    <div class="filter-row">
+      <span>Filter by:</span>
+      <select id="filter">
+        <option value="all">All Products</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+      </select>
+    </div>
+
+    <div class="grid" id="products"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+#css
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  background: #6e9ac6;
+  padding: 50px;
+  color: #935207;
+}
+
+.wrapper {
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 50px;
+  margin-bottom: 30px;
+}
+
+.filter-row {
+  display: flex1;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.filter-row span {
+  font-size: 18px;
+}
+
+select {
+  width: 260px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: rgb(185, 227, 155);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.card {
+  background: #79e8b8;
+  border-radius: 18px;
+  padding: 26px;
+  border: 6px solid #07296e;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.card h3 {
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.price {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 15px;
+  text-transform: lowercase;
+}
+
+.electronics {
+  background: #3b82f6;
+  color: white;
+}
+
+.clothing {
+  background: #bfdbfe;
+  color: #1e3a8a;
+}
+
+/* Animation on filter */
+.fade {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+#js
+const products = [
+  { name: "Wireless Headphones", price: "$129.99", category: "electronics" },
+  { name: "Cotton T-Shirt", price: "$24.99", category: "clothing" },
+  { name: "Bluetooth Speaker", price: "$89.99", category: "electronics" },
+  { name: "Denim Jeans", price: "$59.99", category: "clothing" }
+];
+
+const grid = document.getElementById("products");
+const filter = document.getElementById("filter");
+
+function render(items) {
+  grid.innerHTML = "";
+
+  items.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "card fade";
+
+    card.innerHTML = `
+      <h3>${p.name}</h3>
+      <div class="price">${p.price}</div>
+      <span class="tag ${p.category}">${p.category}</span>
+    `;
+
+    grid.appendChild(card);
+
+    // smooth entry animation
+    setTimeout(() => card.classList.remove("fade"), 50);
+  });
+}
+
+filter.addEventListener("change", () => {
+  const value = filter.value;
+  const result = value === "all"
+    ? products
+    : products.filter(p => p.category === value);
+
+  render(result);
+});
+
+render(products);
